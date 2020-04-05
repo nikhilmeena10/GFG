@@ -1,38 +1,40 @@
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
-public class SubarrayWithSumK {
+public class EquilibriumPoint {
 
-    public static void main(String[] args) {
-        //code
+    public static void main(String[] args) throws Exception {
         FastScanner fs = new FastScanner();
+        Print printer = new Print();
         int t = fs.nextInt();
         while (t > 0) {
             int n = fs.nextInt();
-            long s = fs.nextInt();
             long[] arr = new long[n];
             for (int i = 0; i < n; i++) {
                 arr[i] = fs.nextLong();
             }
-            long sum = 0;
-            int start = 0, end = -1;
-            Map<Long, Integer> map = new HashMap<>();
-            map.put(0L, -1);
-            for (int i = 0; i < n; i++) {
-                sum += arr[i];
-                if (map.containsKey(sum - s)) {
-                    start = map.get(sum - s) + 1;
-                    end = i;
-                    break;
-                }
-                map.put(sum, i);
+            long leftsum = arr[0], rightsum = 0;
+            for (int i = 1; i < n; i++) {
+                rightsum += arr[i];
             }
-            if (end == -1) System.out.println(-1);
-            else System.out.println((start + 1) + " " + (end + 1));
+            int i = 0;
+            boolean possible = false;
+            if (rightsum == 0) printer.println(1);
+            else {
+                for (i = 1; i < n; i++) {
+                    rightsum -= arr[i];
+                    if (leftsum == rightsum) {
+                        possible = true;
+                        break;
+                    }
+                    leftsum += arr[i];
+                }
+                if (possible) printer.println(i + 1);
+                else printer.println(-1);
+            }
             t--;
         }
+        printer.close();
     }
 
     public static class FastScanner {
@@ -74,6 +76,27 @@ public class SubarrayWithSumK {
 
         double nextDouble() {
             return Double.parseDouble(nextToken());
+        }
+    }
+
+    static class Print {
+        private final BufferedWriter bw;
+
+        public Print() {
+            this.bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        }
+
+        public void print(Object object) throws IOException {
+            bw.append("" + object);
+        }
+
+        public void println(Object object) throws IOException {
+            print(object);
+            bw.append("\n");
+        }
+
+        public void close() throws IOException {
+            bw.close();
         }
     }
 

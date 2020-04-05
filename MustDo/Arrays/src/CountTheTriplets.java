@@ -1,36 +1,34 @@
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.StringTokenizer;
 
-public class SubarrayWithSumK {
+//GFG also has a combinatorial solution with same complexity
+public class CountTheTriplets {
 
     public static void main(String[] args) {
-        //code
         FastScanner fs = new FastScanner();
         int t = fs.nextInt();
         while (t > 0) {
             int n = fs.nextInt();
-            long s = fs.nextInt();
             long[] arr = new long[n];
             for (int i = 0; i < n; i++) {
                 arr[i] = fs.nextLong();
             }
-            long sum = 0;
-            int start = 0, end = -1;
-            Map<Long, Integer> map = new HashMap<>();
-            map.put(0L, -1);
+            int count = 0;
             for (int i = 0; i < n; i++) {
-                sum += arr[i];
-                if (map.containsKey(sum - s)) {
-                    start = map.get(sum - s) + 1;
-                    end = i;
-                    break;
+                long target = arr[i];
+                Set<Long> set = new HashSet<>();
+                for (int j = 0; j < n; j++) {
+                    if (j == i) continue;
+                    if (set.contains(target - arr[j])) {
+                        count++;
+                    }
+                    set.add(arr[j]);
                 }
-                map.put(sum, i);
             }
-            if (end == -1) System.out.println(-1);
-            else System.out.println((start + 1) + " " + (end + 1));
+            if (count == 0) System.out.println(-1);
+            else System.out.println(count);
             t--;
         }
     }

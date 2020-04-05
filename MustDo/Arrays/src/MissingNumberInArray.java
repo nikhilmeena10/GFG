@@ -1,36 +1,24 @@
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
-public class SubarrayWithSumK {
+public class MissingNumberInArray {
 
     public static void main(String[] args) {
-        //code
         FastScanner fs = new FastScanner();
         int t = fs.nextInt();
         while (t > 0) {
             int n = fs.nextInt();
-            long s = fs.nextInt();
-            long[] arr = new long[n];
-            for (int i = 0; i < n; i++) {
-                arr[i] = fs.nextLong();
+            int m = n - 1;
+            int[] arr = new int[m];
+            for (int i = 0; i < m; i++) {
+                arr[i] = fs.nextInt();
             }
-            long sum = 0;
-            int start = 0, end = -1;
-            Map<Long, Integer> map = new HashMap<>();
-            map.put(0L, -1);
-            for (int i = 0; i < n; i++) {
-                sum += arr[i];
-                if (map.containsKey(sum - s)) {
-                    start = map.get(sum - s) + 1;
-                    end = i;
-                    break;
-                }
-                map.put(sum, i);
+            int xor = 0;
+            for (int i = 0; i < m; i++) {
+                xor = xor ^ (i + 1) ^ arr[i];
             }
-            if (end == -1) System.out.println(-1);
-            else System.out.println((start + 1) + " " + (end + 1));
+            xor ^= n;
+            System.out.println(xor);
             t--;
         }
     }

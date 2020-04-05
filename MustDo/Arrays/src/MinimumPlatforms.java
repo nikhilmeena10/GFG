@@ -1,38 +1,50 @@
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class SubarrayWithSumK {
+public class MinimumPlatforms {
 
-    public static void main(String[] args) {
-        //code
+    public static void main(String[] args) throws Exception {
         FastScanner fs = new FastScanner();
+        Print printer = new Print();
         int t = fs.nextInt();
         while (t > 0) {
             int n = fs.nextInt();
-            long s = fs.nextInt();
-            long[] arr = new long[n];
+            int[] x = new int[n];
+            int[] y = new int[n];
             for (int i = 0; i < n; i++) {
-                arr[i] = fs.nextLong();
+                x[i] = fs.nextInt();
             }
-            long sum = 0;
-            int start = 0, end = -1;
-            Map<Long, Integer> map = new HashMap<>();
-            map.put(0L, -1);
             for (int i = 0; i < n; i++) {
-                sum += arr[i];
-                if (map.containsKey(sum - s)) {
-                    start = map.get(sum - s) + 1;
-                    end = i;
-                    break;
+                y[i] = fs.nextInt();
+            }
+            Arrays.sort(x);
+            Arrays.sort(y);
+            int xi = 0, yi = 0;
+            int count = 0, max = 0;
+            while (xi < n && yi < n) {
+                if (x[xi] <= y[yi]) {
+                    xi++;
+                    count++;
+                    max = Math.max(max, count);
+                } else {
+                    yi++;
+                    count--;
                 }
-                map.put(sum, i);
             }
-            if (end == -1) System.out.println(-1);
-            else System.out.println((start + 1) + " " + (end + 1));
+            while (xi < n) {
+                xi++;
+                count++;
+                max = Math.max(count, max);
+            }
+            while (yi < n) {
+                yi++;
+                count--;
+            }
+            printer.println(max);
             t--;
         }
+        printer.close();
     }
 
     public static class FastScanner {
@@ -74,6 +86,27 @@ public class SubarrayWithSumK {
 
         double nextDouble() {
             return Double.parseDouble(nextToken());
+        }
+    }
+
+    static class Print {
+        private final BufferedWriter bw;
+
+        public Print() {
+            this.bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        }
+
+        public void print(Object object) throws IOException {
+            bw.append("" + object);
+        }
+
+        public void println(Object object) throws IOException {
+            print(object);
+            bw.append("\n");
+        }
+
+        public void close() throws IOException {
+            bw.close();
         }
     }
 
